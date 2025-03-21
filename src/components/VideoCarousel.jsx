@@ -1,6 +1,7 @@
 import React,{useEffect, useRef, useState} from 'react'
 import {hightlightsSlides} from '../constants'
 import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
 // Register the plugin
@@ -27,7 +28,13 @@ const VideoCarousel = () => {
   const {isEnd,startPlay,videoId,isLastVideo,isPlaying}=video;
 
   //10.Animation for each video to start
-  useEffect(()=>{
+  useGSAP(()=>{
+    gsap.to('#slider',{
+      transform:`translateX(${-100 * videoId}%)`,
+      duration:2,
+      ease:'power2.inOut'
+    })
+
     gsap.to('#video',{
       scrollTrigger:{
         trigger:'#video',
@@ -106,7 +113,7 @@ const VideoCarousel = () => {
       }
 
       const animUpdate=()=>{
-        anim.progress(videoRef.current[videoId] / hightlightsSlides[videoId].videoDuration)
+        anim.progress(videoRef.current[videoId].currentTime / hightlightsSlides[videoId].videoDuration)
       } 
       
       if(isPlaying){
@@ -159,7 +166,7 @@ const VideoCarousel = () => {
         <div key={i} id='slider' className='sm:pr-20 pr-10'>
           <div className='video-carousel_container'>
             <div className='w-full h-full flex-center rounded-3xl overflow-hidden bg-black'>
-              <video id='video' playsInline={true} preload='auto' muted ref={(el)=>(videoRef.current[i]=el)}  onPlay={() => { setVideo((prev) => ({ ...prev, isPlaying: true })) }} onLoadedMetadata={(e)=>handleLoadedMetaData(i,e)}>
+              <video id='video' playsInline={true} preload='auto' muted ref={(el)=>(videoRef.current[i]=el)}  onPlay={() => { setVideo((prev) => ({ ...prev, isPlaying: true })) }} onLoadedMetadata={(e)=>handleLoadedMetaData(i,e)} onEnded={()=> i !== 3 ? handleProcess('video-end',i) : handleProcess('video-last')}>
                 <source src={highlightSlide.video} type='video/mp4' />
               </video>
             </div>
