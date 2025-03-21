@@ -7,6 +7,7 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 // Register the plugin
 gsap.registerPlugin(ScrollTrigger);
 import { pauseImg, playImg, replayImg } from '../utils';
+import { list } from 'postcss';
 const VideoCarousel = () => {
   // 3.initialise the useRef and the useState variable according to the conditions
   const videoRef=useRef([null, null, null,null]);
@@ -166,7 +167,7 @@ const VideoCarousel = () => {
         <div key={i} id='slider' className='sm:pr-20 pr-10'>
           <div className='video-carousel_container'>
             <div className='w-full h-full flex-center rounded-3xl overflow-hidden bg-black'>
-              <video id='video' playsInline={true} preload='auto' muted ref={(el)=>(videoRef.current[i]=el)}  onPlay={() => { setVideo((prev) => ({ ...prev, isPlaying: true })) }} onLoadedMetadata={(e)=>handleLoadedMetaData(i,e)} onEnded={()=> i !== 3 ? handleProcess('video-end',i) : handleProcess('video-last')}>
+              <video id='video' playsInline={true} preload='auto' muted className={`${list.id===2 && 'translate-X-44'} pointer-events-none`} ref={(el)=>(videoRef.current[i]=el)}  onPlay={() => { setVideo((prev) => ({ ...prev, isPlaying: true })) }} onLoadedMetadata={(e)=>handleLoadedMetaData(i,e)} onEnded={()=> i !== 3 ? handleProcess('video-end',i) : handleProcess('video-last')}>
                 <source src={highlightSlide.video} type='video/mp4' />
               </video>
             </div>
